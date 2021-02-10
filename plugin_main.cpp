@@ -15,37 +15,31 @@ extern "C" ErrorCode handleSyscall(uint32_t *regs, void *mem, MemoryMap *mem_map
         regs[Register::v0] = a0 + a1;
         return ErrorCode::Ok;
     }
+    //inge se vale solo usar los tests que ya vienen va
     case 21:
     {
-        std::cout << "\nTest 1: Colors" << std::endl;
-        for (int i = 0; i < 16; i++)
-        {
-            rlutil::setColor(i);
-            std::cout << i << " ";
-        }
+        int a0 = regs[Register::a0];
+        std::cout << "\nColor: " << a0 << std::endl;
+        rlutil::setColor(a0);
+        std::cout << a0 << " ";
         rlutil::resetColor();
-        std::cout << std::endl
-                  << "You should see numbers 0-15 in different colors." << std::endl;
         return ErrorCode::Ok;
     }
     case 22:
     {
-        std::cout << "\nTest 2: Background colors\n";
-        for (int i = 0; i < 8; i++)
-        {
-            rlutil::setBackgroundColor(i);
-            std::cout << i;
-            rlutil::setBackgroundColor(0);
-            std::cout << ' ';
-        }
+        int a0 = regs[Register::a0];
+        std::cout << "\nBackground color: " << a0 << std::endl;
+        rlutil::setBackgroundColor(a0);
+        std::cout << a0;
+        rlutil::setBackgroundColor(0);
+        std::cout << ' ';
         rlutil::resetColor();
-        std::cout << "\nYou should see numbers 0-7 in different-colored backgrounds.\n";
         return ErrorCode::Ok;
     }
     case 23:
     {
-        int x = 7;
-        int y = 7;
+        int x = regs[Register::a0];
+        int y = regs[Register::a1];
         rlutil::cls();
         rlutil::CursorHider curs;
         std::cout << "Test 9: Arrow keys" << std::endl;
