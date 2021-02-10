@@ -1,0 +1,3 @@
+/home/ubuntu/Downloads/easyasm-plugin-sample/CMakeFiles/rebuild_cache.dir
+/home/ubuntu/Downloads/easyasm-plugin-sample/CMakeFiles/edit_cache.dir
+/home/ubuntu/Downloads/easyasm-plugin-sample/CMakeFiles/sc-plugin.dir
