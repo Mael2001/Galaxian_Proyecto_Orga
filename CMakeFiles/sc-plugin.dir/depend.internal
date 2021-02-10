@@ -4,3 +4,4 @@
 CMakeFiles/sc-plugin.dir/plugin_main.cpp.o
  /home/ubuntu/Downloads/easyasm-plugin-sample/plugin_main.cpp
  easm.h
+ rlutil.h
