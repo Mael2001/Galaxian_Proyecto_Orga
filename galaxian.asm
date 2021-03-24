@@ -1,6 +1,7 @@
 .global galaxian
     .data
-    out_string: ;.asciiz "\Desea Continuar?\n"
+        str1: .byte "Has Perdido, Deseas Continuar?",0
+        str2: .byte "Felicidades, Terminaste el nivel, quieres seguir avanzando?",0
     .text
 galaxian:
     addi $t0, $zero, 1
@@ -16,6 +17,7 @@ galaxian:
     li $s0, 0; pos enemigo
     li $t9, 0; existe bala
     li $t7, 0; contador para quitar vidas
+    li $t2, 0; contador para poner vidas
 
 allocar_enemigos:
     li $t8, 1; allocar enemigos en stack para validaciones
@@ -265,7 +267,7 @@ key:
 
 
     addi $t5, $zero, 1000
-    slt $t6, $t5, $s7  
+    slt $t6, $t5, $t2  
     bne $t6, $zero, agregar_vida
 
     
@@ -279,7 +281,6 @@ key:
     j key
 
 print_bala:
-    slti $v0, $s2, 30
     addi $s2, $s2, -3
     add $s1, $zero, $s5
     move $a0,$s2
@@ -289,17 +290,28 @@ print_bala:
     li $a0, 124
     li $v0, 11
     syscall 
-    beq $v0, $zero, hit_bala
+    slti $t0, $s2, 31
+    bne $t0, $zero, hit_bala
 
     jr $ra
 
 hit_bala:
     move $s2, $s6
-    addi $s7,$s7, 200;highscore
+    addi $s7,$s7, 20;highscore
+    addi $t2,$t2, 20;highscore
+
+    li $t6, 100
+    mult $t6, $s4; dificultad
+    mflo $t6
+
+    slt $t0, $t6, $s7
+    bne  $t0, $zero, siguienteStage
+
     jr $ra
-    
+
 imprimir_izq:
     addi $s7,$s7, 1;highscore
+    addi $t2,$t2, 1;highscore
 
     jal upd_hud
     li $a0, 15
@@ -314,6 +326,7 @@ imprimir_izq:
     
 imprimir_der:
     addi $s7,$s7, 1;highscore
+    addi $t2,$t2, 1;highscore
 
     jal upd_hud
     li $a0, 15
@@ -372,6 +385,10 @@ upd_enemigo:
 
 agregar_vida:
     addi $s3, $s3, 1
+    addi $t2,$t2, 0;highscore
+    
+    li $v0, 26
+    syscall
     bne $v0,$zero, imprimir_der
     beq $v0,$zero, imprimir_izq
 
@@ -429,3 +446,8 @@ salir:
     ;li $v0,5;ver si quiere jugar de nuevo
     ;syscall
     ;bne $zero, $t0, galaxian
+
+siguienteStage:
+
+    addi $s4,$s4, 1; stage
+    j allocar_enemigos
