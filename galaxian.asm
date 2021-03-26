@@ -435,19 +435,29 @@ upd_hud:
     jr $ra
 
 salir:
-    ;li $v0,20;limpiar
-    ;syscall
+    li $v0,20;limpiar
+    syscall
 
     addi $sp, $sp,604; liberando espacio
 
-    ;la $a0, out_string;mensaje de volver a jugar
-    ;li $v0,4
-    ;syscall
-    ;li $v0,5;ver si quiere jugar de nuevo
-    ;syscall
-    ;bne $zero, $t0, galaxian
-
+    li $a0, str1;mensaje de volver a jugar
+    li $v0,4
+    syscall
+    li $v0,5;ver si quiere jugar de nuevo
+    syscall
+    bne $zero, $v0, galaxian
+    j termina
 siguienteStage:
+    li $v0,20;limpiar
+    syscall
 
+    addi $sp, $sp,604; liberando espacio
+    li $a0, str2;mensaje de volver a jugar
+    li $v0,4
+    syscall
+    li $v0,5;ver si quiere jugar de nuevo
+    syscall
+    li $t7, 0; contador para quitar vidas
     addi $s4,$s4, 1; stage
-    j allocar_enemigos
+    bne $zero, $v0, allocar_enemigos
+termina:
